@@ -19,6 +19,9 @@
 		419C112318FAC4F000EAAA80 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419C110B18FAC4F000EAAA80 /* UIKit.framework */; };
 		419C112B18FAC4F000EAAA80 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 419C112918FAC4F000EAAA80 /* InfoPlist.strings */; };
 		419C112D18FAC4F000EAAA80 /* BluetoothTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 419C112C18FAC4F000EAAA80 /* BluetoothTests.m */; };
+		419C113718FAC4FD00EAAA80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 419C113618FAC4FD00EAAA80 /* Main.storyboard */; };
+		419C113A18FAC5C900EAAA80 /* FirstPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 419C113918FAC5C900EAAA80 /* FirstPageViewController.m */; };
+		419C113C18FACD2000EAAA80 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419C113B18FACD2000EAAA80 /* CoreBluetooth.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,10 @@
 		419C112818FAC4F000EAAA80 /* BluetoothTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BluetoothTests-Info.plist"; sourceTree = "<group>"; };
 		419C112A18FAC4F000EAAA80 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		419C112C18FAC4F000EAAA80 /* BluetoothTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluetoothTests.m; sourceTree = "<group>"; };
+		419C113618FAC4FD00EAAA80 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../Main.storyboard; sourceTree = "<group>"; };
+		419C113818FAC5C900EAAA80 /* FirstPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstPageViewController.h; sourceTree = "<group>"; };
+		419C113918FAC5C900EAAA80 /* FirstPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstPageViewController.m; sourceTree = "<group>"; };
+		419C113B18FACD2000EAAA80 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				419C113C18FACD2000EAAA80 /* CoreBluetooth.framework in Frameworks */,
 				419C110A18FAC4F000EAAA80 /* CoreGraphics.framework in Frameworks */,
 				419C110C18FAC4F000EAAA80 /* UIKit.framework in Frameworks */,
 				419C110818FAC4F000EAAA80 /* Foundation.framework in Frameworks */,
@@ -96,6 +104,7 @@
 		419C110618FAC4F000EAAA80 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				419C113B18FACD2000EAAA80 /* CoreBluetooth.framework */,
 				419C110718FAC4F000EAAA80 /* Foundation.framework */,
 				419C110918FAC4F000EAAA80 /* CoreGraphics.framework */,
 				419C110B18FAC4F000EAAA80 /* UIKit.framework */,
@@ -107,10 +116,13 @@
 		419C110D18FAC4F000EAAA80 /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
+				419C113618FAC4FD00EAAA80 /* Main.storyboard */,
 				419C111618FAC4F000EAAA80 /* AppDelegate.h */,
 				419C111718FAC4F000EAAA80 /* AppDelegate.m */,
 				419C111918FAC4F000EAAA80 /* Images.xcassets */,
 				419C110E18FAC4F000EAAA80 /* Supporting Files */,
+				419C113818FAC5C900EAAA80 /* FirstPageViewController.h */,
+				419C113918FAC5C900EAAA80 /* FirstPageViewController.m */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
@@ -219,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				419C113718FAC4FD00EAAA80 /* Main.storyboard in Resources */,
 				419C111218FAC4F000EAAA80 /* InfoPlist.strings in Resources */,
 				419C111A18FAC4F000EAAA80 /* Images.xcassets in Resources */,
 			);
@@ -241,6 +254,7 @@
 			files = (
 				419C111818FAC4F000EAAA80 /* AppDelegate.m in Sources */,
 				419C111418FAC4F000EAAA80 /* main.m in Sources */,
+				419C113A18FAC5C900EAAA80 /* FirstPageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +453,7 @@
 				419C113218FAC4F000EAAA80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		419C113318FAC4F000EAAA80 /* Build configuration list for PBXNativeTarget "BluetoothTests" */ = {
 			isa = XCConfigurationList;
@@ -447,6 +462,7 @@
 				419C113518FAC4F000EAAA80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
