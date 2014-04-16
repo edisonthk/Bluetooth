@@ -15,4 +15,5 @@
 }
 @property CBCentralManager* manager;
 @property CBPeripheral* connectedPeripheral;
+
 @end

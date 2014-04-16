@@ -10,12 +10,14 @@
 
 @interface FirstPageViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *myLabel;
+@property (weak, nonatomic) IBOutlet UILabel *label1;
 
 @end
 
 @implementation FirstPageViewController
 @synthesize manager;
 @synthesize connectedPeripheral;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -56,9 +58,14 @@
 // Listener when CBCentralManager is instanced
 -(void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
+    
+    self.manager = central;
+    
     NSLog(@"%@",NSStringFromSelector(_cmd));
     if (central.state==CBCentralManagerStatePoweredOn) {
         [central scanForPeripheralsWithServices:nil options:nil];
+    }else{
+        NSLog(@"PowerOff, reason:%@",(central.state == CBCentralManagerStateUnsupported ? @"no-supported": @"supported"));
     }
 }
 
@@ -67,6 +74,11 @@
 -(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
     NSLog(@"%@:peripheralName:%@,RSSI:%@",NSStringFromSelector(_cmd),peripheral.description,[RSSI stringValue]);
+    
+    self.myLabel.text = [NSString stringWithFormat:@"peripheralDiscover with peripheral:%@ ,RSSI:%@",
+                         peripheral.description,
+                         [RSSI stringValue]];
+    
     [manager connectPeripheral:peripheral options:nil];
     connectedPeripheral=peripheral;
     connectedPeripheral.delegate=self;
@@ -103,6 +115,16 @@
         }
     }
 }
+- (IBAction)connectAction:(id)sender {
+    
+    if (self.manager.state==CBCentralManagerStatePoweredOn) {
+        [self.manager scanForPeripheralsWithServices:nil options:nil];
+    }else{
+        NSLog(@"PowerOff, reason:%@",(self.manager.state == CBCentralManagerStateUnsupported ? @"no-supported": @"supported"));
+    }
+    
+}
+
 
 // if success
 -(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
@@ -112,21 +134,79 @@
 }
 
 
+
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error
+{
+    self.label1.text = @"didUpdateValueForDescriptor";
+}
+
+int cnt = 0;
+
+-(NSString*)toggleAlphabets{
+    NSArray* alphabets = @[@"a",@"b",@"c",@"d"];
+    cnt ++;
+    if(cnt >= alphabets.count) cnt = 0;
+    
+    return alphabets[cnt];
+}
+
 - (IBAction)buttonPushed:(UIButton *)sender {
     NSLog(@"%@",NSStringFromSelector(_cmd));
     for (CBService* service in connectedPeripheral.services) {
         for (CBCharacteristic* characteristic in service.characteristics) {
-            if (characteristic.properties&(CBCharacteristicPropertyWrite|CBCharacteristicPropertyWriteWithoutResponse)) {
-                if([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"C3EA"]]){
-                   //探してるCharacteristic!
-                    NSLog(@"はろわ");
-                }
+            
+            if([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"A254"]]){
+                //探してるCharacteristic!
+                
+                NSString* str = [self toggleAlphabets];
+                
+                self.myLabel.text = [NSString stringWithFormat:@"send : %@", str];
+                
                 // sending data
-                NSData* data=[@"hello!" dataUsingEncoding:NSASCIIStringEncoding];
-                [connectedPeripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+                NSData* data=[str dataUsingEncoding:NSASCIIStringEncoding];
+                [connectedPeripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
+                
+                // if the characteristics is allowed to received notify, setNotifyValue TRUE
+                // when set notify to TRUE, didUpdateNotificationStateForCharacteristic method is invoked
+                //
+                if (characteristic.properties&(CBCharacteristicPropertyNotify|CBCharacteristicPropertyIndicate)) {
+                    NSLog(@"Notify start");
+                    [connectedPeripheral setNotifyValue:TRUE forCharacteristic:characteristic];
+                }else{
+                    NSLog(@"no Notify!");
+                }
+                
             }
+            
         }
     }
+}
+
+// this method will be invoked, but there is no value is returned in characteris
+// this method will only invoked when there is any change in notifyValue (Only effect in CENTRAL)
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+    if(error){
+        NSLog(@"didUpdateNotificationState Error! : %@", error);
+        return;
+    }
+    
+    // characteristic.value is empty in this method
+    NSString* str = [[NSString alloc]initWithData:characteristic.value encoding:NSASCIIStringEncoding];
+    NSLog(@"didUpdateNotification : %@",str);
+}
+
+// Invoked only when notify is true.
+// This method will be invoked everytime when there is any update on characteristic value (VALUE changed in PERIPHERAL)
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
+{
+    if(error){
+        NSLog(@"didUpdateValueForCharacteristic Error! : %@", error);
+        return;
+    }
+    
+    NSString* str = [[NSString alloc]initWithData:characteristic.value encoding:NSASCIIStringEncoding];
+    NSLog(@"didUpdateValue : %@",str);
+    self.label1.text = [NSString stringWithFormat:@"Recv : %@", str];
 }
 
 @end
